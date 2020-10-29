@@ -1,0 +1,76 @@
+
+
+
+
+
+
+infoSec
+
+security essentials
+
+enterprise Security
+
+	es content update
+	
+
+user behavior analytics
+
+	机器学习
+	
+Phantom
+	编排和执行
+https://192.168.1.10:8000/zh-CN/custom/SA-Utils/appmaker/downloadapp?filename=1553766634_Splunk_TA_AROnPrem-1.0.0-0.spl&namespace=SA-Utils
+
+<option name="charting.fieldColors">{"critical": 0xD25B3B, "high": 0xFF8800, "medium": 0xF0BE1B, "low": 0x98BF3B, "informational": 0x5378AD, "unknown": 0x999999}</option>
+
+maxDataSize = 1000
+maxHotSpanSecs = 432000
+frozenTimePeriodInSecs = 2592000
+
+ip, mac, nt_host, dns, owner, priority, lat, long, city, country, bunit, category, pci_domain, is_expected, should_timesync, should_update, *
+
+铬钒钢 CR-V
+锋威特
+
+    <panel>
+      <title>Total Count</title>
+      <single>
+        <title>Count $result.unit_len$ $unit_e$</title>
+        <search>
+          <progress>
+            <eval token="unit_e">$result.unit_len$</eval>
+          </progress>
+          <query>| tstats `summariesonly` count as current_count from datamodel=Network_Traffic.All_Traffic where earliest=-24h@h latest=+0s | appendcols [| tstats `summariesonly` count as historical_count from datamodel=Network_Traffic.All_Traffic where earliest=-48h@h latest=-24h@h] 
+| transpose
+| eval _time = if(column="current_count",now(),now() - 3600)
+| fields - column
+| rename "row 1" as count 
+| eval count=case( count&gt;1000000000,round(count/1000000000,3), count&gt;1000000,round(count/1000000,2), count&gt;1000,round(count/1000,1), 1=1,count)
+| eval unit_len=len(replace(count,"(\d*)\.(\d*)", "\2"))
+| sort _time</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="colorBy">trend</option>
+        <option name="colorMode">none</option>
+        <option name="drilldown">all</option>
+        <option name="numberPrecision">0.0</option>
+        <option name="rangeColors">["0x53a051","0x0877a6","0xf8be34","0xf1813f","0xdc4e41"]</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="showSparkline">0</option>
+        <option name="showTrendIndicator">1</option>
+        <option name="trellis.enabled">0</option>
+        <option name="trellis.scales.shared">1</option>
+        <option name="trellis.size">medium</option>
+        <option name="trendColorInterpretation">inverse</option>
+        <option name="trendDisplayMode">absolute</option>
+        <option name="unit">$unit_e$</option>
+        <option name="unitPosition">after</option>
+        <option name="useColors">1</option>
+        <option name="useThousandSeparators">1</option>
+        <drilldown>
+          <link target="_self">search?q=%7C%20tstats%20%60summariesonly%60%20count%20from%20datamodel%3DNetwork_Traffic.All_Traffic%20where%20All_Traffic.transport%3Dtcp%20%60src_stream%60%20earliest%3D-24h%40h%20latest%3D%2B0s%20by%20All_Traffic.src%20All_Traffic.dest</link>
+        </drilldown>
+      </single>
+    </panel>
